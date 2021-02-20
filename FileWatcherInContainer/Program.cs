@@ -18,8 +18,8 @@ namespace FileWatcherInContainer
         static async Task Main(string[] args)
         {
             var config = new ConfigurationBuilder()
-                .AddCommandLine(args)
                 .AddJsonFile("appsettings.json")
+                .AddCommandLine(args)
                 .Build();
 
             var serviceCollection = new ServiceCollection();
