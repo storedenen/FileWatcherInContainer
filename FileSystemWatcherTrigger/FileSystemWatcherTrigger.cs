@@ -46,17 +46,22 @@ namespace FileSystemWatcherTrigger
             {
                 while (true)
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
-
-                    currentWriteTime = new FileInfo(fullPath).LastWriteTime;
-
-                    if (lastWriteTime != currentWriteTime)
+                    if (File.Exists(fullPath))
                     {
-                        currentWriteTime = DateTime.UtcNow;
-                        File.SetLastWriteTime(fullPath, currentWriteTime);
-                        _logger.LogDebug("File last write time updated: {filename} - {newTime}", fullPath, DateTime.UtcNow);
+                        cancellationToken.ThrowIfCancellationRequested();
 
-                        lastWriteTime = currentWriteTime;
+                        currentWriteTime = new FileInfo(fullPath).LastWriteTime;
+
+                        if (lastWriteTime != currentWriteTime)
+                        {
+                            currentWriteTime = DateTime.UtcNow;
+                            
+                            File.SetLastWriteTime(fullPath, currentWriteTime);
+                            
+                            _logger.LogDebug("File last write time updated: {filename} - {newTime}", fullPath, DateTime.UtcNow);
+
+                            lastWriteTime = currentWriteTime;
+                        }
                     }
 
                     await Task.Delay(1000);
