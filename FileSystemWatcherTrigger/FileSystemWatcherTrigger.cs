@@ -40,13 +40,8 @@ namespace FileSystemWatcherTrigger
             _logger.LogDebug("Started watching file: {filename}", fullPath);
 
             using var checksumCalculator = SHA256.Create();
-            byte[] lastCheckSum = null;
-            byte[] currentCheckSum = null;
-
-            using (var stream = File.OpenRead(fullPath))
-            {
-                lastCheckSum = checksumCalculator.ComputeHash(stream);
-            }
+            var currentWriteTime = new FileInfo(fullPath).LastWriteTime;
+            var  lastWriteTime = currentWriteTime;
 
             try
             {
@@ -54,18 +49,16 @@ namespace FileSystemWatcherTrigger
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    using (var stream = File.OpenRead(fullPath))
-                    {
-                        currentCheckSum = checksumCalculator.ComputeHash(stream);
-                    }
+                    currentWriteTime = new FileInfo(fullPath).LastWriteTime;
 
-                    if (!lastCheckSum.SequenceEqual(currentCheckSum))
+                    if (lastWriteTime != currentWriteTime)
                     {
-                        File.SetLastWriteTime(fullPath, DateTime.UtcNow);
+                        currentWriteTime = DateTime.UtcNow;
+                        File.SetLastWriteTime(fullPath, currentWriteTime);
                         _logger.LogDebug("File last write time updated: {filename} - {newTime}", fullPath, DateTime.UtcNow);
-                    }
 
-                    lastCheckSum = currentCheckSum;
+                        lastWriteTime = currentWriteTime;
+                    }
 
                     await Task.Delay(1000);
                 }
