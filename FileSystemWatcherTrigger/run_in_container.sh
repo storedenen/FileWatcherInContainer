@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 echo "Starting filewatcher..."
 
 [ ! -d "/tmp/WatchDir" ] && mkdir /tmp/WatchDir
