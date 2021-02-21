@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 using System.IO;
 using System.Threading.Tasks;
 using System.Threading;
@@ -62,6 +61,10 @@ namespace FileSystemWatcherTrigger
 
                     await Task.Delay(1000);
                 }
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.LogWarning("Operation cancelled.");
             }
             catch (Exception exception)
             {

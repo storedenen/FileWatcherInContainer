@@ -54,6 +54,10 @@ namespace FileWatcherInContainer
                     await Task.Delay(10);
                 }
             }
+            catch (OperationCanceledException)
+            {
+                _logger.LogWarning("Operation cancelled.");
+            }
             catch(Exception exception)
             {
                 _logger.LogWarning(exception, "Exception occured while watching.");

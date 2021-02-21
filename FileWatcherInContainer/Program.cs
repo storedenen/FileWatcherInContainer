@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Debug;
-using Microsoft.Extensions.Logging.Console;
 using System;
 using System.Threading.Tasks;
 using System.Threading;
@@ -56,7 +54,7 @@ namespace FileWatcherInContainer
 
         private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IConfiguration>(_ => configuration);
+            services.AddSingleton<IConfiguration>(_ => configuration);
             services
                 .AddLogging(configure => configure.AddConsole().AddConfiguration(configuration.GetSection("Logging")))
                 .AddSingleton<FileWatcherService>();

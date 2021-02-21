@@ -54,7 +54,7 @@ namespace FileSystemWatcherTrigger
 
         private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IConfiguration>(_ => configuration);
+            services.AddSingleton<IConfiguration>(_ => configuration);
             services
                 .AddLogging(configure => configure.AddConsole().AddConfiguration(configuration.GetSection("Logging")))
                 .AddSingleton<FileSystemWatcherTrigger>();
