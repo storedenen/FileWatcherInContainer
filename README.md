@@ -36,3 +36,4 @@ To start the examples, both project contains a run_in_container script for windo
 
 When you modify the file you can see if it picks up in the containers output.
 
+![ExampleRun](ExampleRun.png)
